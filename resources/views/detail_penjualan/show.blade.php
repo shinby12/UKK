@@ -17,8 +17,10 @@
         <p><strong>Subtotal:</strong> Rp{{ number_format($detailPenjualan->subtotal, 2) }}</p>
 
         <hr class="my-4">
-
         <a href="{{ route('detail-penjualan.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 mt-4 inline-block">Kembali</a>
+        <a href="{{ route('detail-penjualan.pdf', $detailPenjualan->id) }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+    Download PDF</a>
+
     </div>
 </div>
 

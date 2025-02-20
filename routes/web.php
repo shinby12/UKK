@@ -14,6 +14,10 @@ use App\Http\Controllers\LaporanPenjualanController;
 use App\Exports\LaporanPenjualanExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+
+
+Route::get('/detail-penjualan/{id}/pdf', [DetailPenjualanController::class, 'downloadPDF'])->name('detail-penjualan.pdf');
+
 Route::resource('detail-penjualan', DetailPenjualanController::class);
 Route::get('/detail-penjualan/{id}', [DetailPenjualanController::class, 'show'])->name('detail-penjualan.show');
 Route::get('/detail-penjualan/{id}/print', [DetailPenjualanController::class, 'printPDF'])->name('detail-penjualan.print');

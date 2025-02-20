@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
 {
+    
     public function index()
     {
         $penjualans = Penjualan::with('pelanggan')->get();
@@ -31,16 +32,22 @@ class PenjualanController extends Controller
         'total_harga' => 'required|numeric|min:0',
     ]);
 
-    // Masukkan data secara manual agar jumlah tidak hilang
-    Penjualan::create([
-        'pelanggan_id' => $request->pelanggan_id,
-        'produk_id' => $request->produk_id,
-        'jumlah' => $request->jumlah,
-        'total_harga' => $request->total_harga,
-    ]);
+    // Cek stok produk
+    $produk = Produk::findOrFail($request->produk_id);
+    if ($request->jumlah > $produk->stok) {
+        return back()->withErrors(['jumlah' => 'Jumlah melebihi stok yang tersedia!']);
+    }
+
+    // Kurangi stok setelah pembelian
+    $produk->stok -= $request->jumlah;
+    $produk->save();
+
+    // Simpan data penjualan
+    Penjualan::create($request->all());
 
     return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan');
 }
+
 
 
     public function edit(Penjualan $penjualan)
@@ -69,4 +76,6 @@ class PenjualanController extends Controller
     $penjualan->delete();
     return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil dihapus.');
 }
+
+
 }
